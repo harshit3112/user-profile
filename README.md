@@ -87,7 +87,7 @@ The project is organized into 4 modules:
 ## API Endpoints
 
 ### Create User
-- **POST** `/api/user/create`
+- **POST** `/v1/user/create`
 - **Request Body**:
   ```json
   {
@@ -100,7 +100,7 @@ The project is organized into 4 modules:
   ```
 
 ### Get User
-- **GET** `/api/user/{userId}`
+- **GET** `/v1/user/{userId}`
 - **Path Parameter**: `userId` (Long)
 
 ## Sample API Responses
@@ -152,7 +152,7 @@ The application comes with sample data pre-loaded. You can test the APIs using:
 
    ```bash
    # Create a user
-   curl -X POST http://localhost:8080/user-profile/api/user/create \
+   curl -X POST http://localhost:8080/user-profile/v1/user/create \
      -H "Content-Type: application/json" \
      -d '{
        "firstName": "Test",
@@ -163,7 +163,7 @@ The application comes with sample data pre-loaded. You can test the APIs using:
      }'
 
    # Get a user
-   curl -X GET http://localhost:8080/user-profile/api/user/1
+   curl -X GET http://localhost:8080/user-profile/v1/user/1
    ```
 
 ## Architecture Principles
