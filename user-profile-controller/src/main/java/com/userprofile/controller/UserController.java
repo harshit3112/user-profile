@@ -7,23 +7,22 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/v1/user")
 @Tag(name = "User Management", description = "APIs for managing user profiles")
+@RequiredArgsConstructor
 public class UserController {
     
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
     
-    @PostMapping("/create")
+    @PostMapping
     @Operation(summary = "Create a new user", description = "Creates a new user profile with the provided information")
-    public ResponseEntity<ApiResponse<UserDto>> createUser(
-            @Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<ApiResponse<UserDto>> createUser(@Valid @RequestBody UserDto userDto) {
         try {
             UserDto createdUser = userService.createUser(userDto);
             ApiResponse<UserDto> response = ApiResponse.success(createdUser, "User created successfully");
@@ -36,8 +35,7 @@ public class UserController {
     
     @GetMapping("/{userId}")
     @Operation(summary = "Get user by ID", description = "Retrieves user profile information by user ID")
-    public ResponseEntity<ApiResponse<UserDto>> getUser(
-            @Parameter(description = "User ID", required = true)
+    public ResponseEntity<ApiResponse<UserDto>> getUser(@Parameter(description = "User ID", required = true)
             @PathVariable Long userId) {
         try {
             UserDto user = userService.getUser(userId);
