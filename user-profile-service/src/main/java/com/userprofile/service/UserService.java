@@ -1,10 +1,11 @@
 package com.userprofile.service;
 
-import com.userprofile.model.dto.UserDto;
+import com.userprofile.model.request.UserRequest;
+import com.userprofile.model.response.UserResponse;
 
 public interface UserService {
-    
-    UserDto createUser(UserDto userDto);
-    
-    UserDto getUser(Long userId);
+
+    UserResponse createUser(UserRequest userRequest);
+
+    UserResponse getUser(Long userId);
 }

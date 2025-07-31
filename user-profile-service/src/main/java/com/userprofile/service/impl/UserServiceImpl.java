@@ -1,6 +1,7 @@
 package com.userprofile.service.impl;
 
-import com.userprofile.model.dto.UserDto;
+import com.userprofile.model.request.UserRequest;
+import com.userprofile.model.response.UserResponse;
 import com.userprofile.repository.UserRepository;
 import com.userprofile.repository.entity.UserDetails;
 import com.userprofile.service.UserService;
@@ -16,14 +17,14 @@ public class UserServiceImpl implements UserService {
     
     @Override
     @Transactional
-    public UserDto createUser(UserDto userDto) {
+    public UserResponse createUser(UserRequest userRequest) {
         // Check if user already exists
-        if (userRepository.existsByEmail(userDto.getEmail())) {
-            throw new RuntimeException("User with email " + userDto.getEmail() + " already exists");
+        if (userRepository.existsByEmail(userRequest.getEmail())) {
+            throw new RuntimeException("User with email " + userRequest.getEmail() + " already exists");
         }
         
         // Convert DTO to Entity
-        UserDetails userDetails = convertDtoToEntity(userDto);
+        UserDetails userDetails = convertDtoToEntity(userRequest);
         
         // Save user
         UserDetails savedUser = userRepository.save(userDetails);
@@ -33,32 +34,31 @@ public class UserServiceImpl implements UserService {
     }
     
     @Override
-    public UserDto getUser(Long userId) {
+    public UserResponse getUser(Long userId) {
         UserDetails userDetails = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + userId));
         
         return convertEntityToDto(userDetails);
     }
     
-    private UserDetails convertDtoToEntity(UserDto userDto) {
+    private UserDetails convertDtoToEntity(UserRequest userRequest) {
         UserDetails userDetails = new UserDetails();
-        userDetails.setId(userDto.getId());
-        userDetails.setFirstName(userDto.getFirstName());
-        userDetails.setLastName(userDto.getLastName());
-        userDetails.setEmail(userDto.getEmail());
-        userDetails.setPhoneNumber(userDto.getPhoneNumber());
-        userDetails.setAddress(userDto.getAddress());
+        userDetails.setFirstName(userRequest.getFirstName());
+        userDetails.setLastName(userRequest.getLastName());
+        userDetails.setEmail(userRequest.getEmail());
+        userDetails.setPhoneNumber(userRequest.getPhoneNumber());
+        userDetails.setAddress(userRequest.getAddress());
         return userDetails;
     }
     
-    private UserDto convertEntityToDto(UserDetails userDetails) {
-        UserDto userDto = new UserDto();
-        userDto.setId(userDetails.getId());
-        userDto.setFirstName(userDetails.getFirstName());
-        userDto.setLastName(userDetails.getLastName());
-        userDto.setEmail(userDetails.getEmail());
-        userDto.setPhoneNumber(userDetails.getPhoneNumber());
-        userDto.setAddress(userDetails.getAddress());
-        return userDto;
+    private UserResponse convertEntityToDto(UserDetails userDetails) {
+        UserResponse response = new UserResponse();
+        response.setUserId(userDetails.getId());
+        response.setFirstName(userDetails.getFirstName());
+        response.setLastName(userDetails.getLastName());
+        response.setEmail(userDetails.getEmail());
+        response.setPhoneNumber(userDetails.getPhoneNumber());
+        response.setAddress(userDetails.getAddress());
+        return response;
     }
 }

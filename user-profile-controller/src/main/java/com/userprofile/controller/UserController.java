@@ -1,7 +1,8 @@
 package com.userprofile.controller;
 
-import com.userprofile.model.dto.UserDto;
+import com.userprofile.model.request.UserRequest;
 import com.userprofile.model.response.ApiResponse;
+import com.userprofile.model.response.UserResponse;
 import com.userprofile.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -22,27 +23,27 @@ public class UserController {
     
     @PostMapping
     @Operation(summary = "Create a new user", description = "Creates a new user profile with the provided information")
-    public ResponseEntity<ApiResponse<UserDto>> createUser(@Valid @RequestBody UserDto userDto) {
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @RequestBody UserRequest userRequest) {
         try {
-            UserDto createdUser = userService.createUser(userDto);
-            ApiResponse<UserDto> response = ApiResponse.success(createdUser, "User created successfully");
+            UserResponse createdUser = userService.createUser(userRequest);
+            ApiResponse<UserResponse> response = ApiResponse.success(createdUser, "User created successfully");
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         } catch (Exception e) {
-            ApiResponse<UserDto> response = ApiResponse.error(e.getMessage(), "USER_CREATION_ERROR");
+            ApiResponse<UserResponse> response = ApiResponse.error(e.getMessage(), "USER_CREATION_ERROR");
             return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
         }
     }
     
     @GetMapping("/{userId}")
     @Operation(summary = "Get user by ID", description = "Retrieves user profile information by user ID")
-    public ResponseEntity<ApiResponse<UserDto>> getUser(@Parameter(description = "User ID", required = true)
-            @PathVariable Long userId) {
+    public ResponseEntity<ApiResponse<UserResponse>> getUser(@Parameter(description = "User ID", required = true)
+            @PathVariable("userId") Long userId) {
         try {
-            UserDto user = userService.getUser(userId);
-            ApiResponse<UserDto> response = ApiResponse.success(user, "User retrieved successfully");
+            UserResponse user = userService.getUser(userId);
+            ApiResponse<UserResponse> response = ApiResponse.success(user, "User retrieved successfully");
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
-            ApiResponse<UserDto> response = ApiResponse.error(e.getMessage(), "USER_NOT_FOUND");
+            ApiResponse<UserResponse> response = ApiResponse.error(e.getMessage(), "USER_NOT_FOUND");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
     }
