@@ -1,0 +1,42 @@
+server:
+  port: 8087
+
+spring:
+  application:
+    name: user-profile-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/userprofiledb
+    driver-class-name: org.postgresql.Driver
+    username: userprofile_user
+    password: userprofile_password
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+
+  sql:
+    init:
+      mode: never
+
+# Swagger/OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    com.userprofile: DEBUG
+    org.springframework.web: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
