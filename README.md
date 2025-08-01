@@ -24,7 +24,7 @@ The project is organized into 4 modules:
 
 ### 4. user-profile-repository
 - Contains JPA entities and repositories
-- Database layer with H2 in-memory database
+- Database layer with PostgreSQL database
 - Entity definitions and database queries
 
 ## Technology Stack
@@ -32,7 +32,7 @@ The project is organized into 4 modules:
 - **Java**: 17
 - **Framework**: Spring Boot 3.2.0
 - **Build Tool**: Maven
-- **Database**: H2 (In-memory)
+- **Database**: PostgreSQL
 - **Documentation**: Swagger/OpenAPI 3
 - **Validation**: Jakarta Validation
 - **ORM**: Spring Data JPA with Hibernate
@@ -43,7 +43,7 @@ The project is organized into 4 modules:
 - Retrieve user profiles by ID
 - Input validation with proper error handling
 - Swagger UI for API documentation
-- H2 console for database inspection
+- PostgreSQL database integration
 - Global exception handling
 - Standardized API responses
 
@@ -51,21 +51,32 @@ The project is organized into 4 modules:
 
 - Java 17 or higher
 - Maven 3.6 or higher
+- PostgreSQL 12 or higher
 
 ## How to Run
 
-1. **Clone the repository**
+1. **Setup PostgreSQL Database**
+   ```bash
+   # Create database
+   createdb userprofiledb
+   
+   # Or using psql
+   psql -U postgres
+   CREATE DATABASE userprofiledb;
+   ```
+
+2. **Clone the repository**
    ```bash
    git clone <repository-url>
    cd user-profile
    ```
 
-2. **Build the project**
+3. **Build the project**
    ```bash
    mvn clean install
    ```
 
-3. **Run the application**
+4. **Run the application**
    ```bash
    cd user-profile-controller
    mvn spring-boot:run
@@ -76,13 +87,10 @@ The project is organized into 4 modules:
    java -jar user-profile-controller/target/user-profile-controller-1.0.0.jar
    ```
 
-4. **Access the application**
-   - **Base URL**: http://localhost:8080/user-profile
-   - **Swagger UI**: http://localhost:8080/user-profile/swagger-ui.html
-   - **H2 Console**: http://localhost:8080/user-profile/h2-console
-     - JDBC URL: `jdbc:h2:mem:userprofiledb`
-     - Username: `sa`
-     - Password: `password`
+5. **Access the application**
+   - **Base URL**: http://localhost:8087/user-profile
+   - **Swagger UI**: http://localhost:8087/user-profile/swagger-ui.html
+   - **Database**: PostgreSQL on localhost:5432/userprofiledb
 
 ## API Endpoints
 
@@ -152,7 +160,7 @@ The application comes with sample data pre-loaded. You can test the APIs using:
 
    ```bash
    # Create a user
-   curl -X POST http://localhost:8080/user-profile/v1/user/create \
+   curl -X POST http://localhost:8087/user-profile/v1/user/create \
      -H "Content-Type: application/json" \
      -d '{
        "firstName": "Test",
@@ -163,7 +171,7 @@ The application comes with sample data pre-loaded. You can test the APIs using:
      }'
 
    # Get a user
-   curl -X GET http://localhost:8080/user-profile/v1/user/1
+   curl -X GET http://localhost:8087/user-profile/v1/user/1
    ```
 
 ## Architecture Principles
@@ -186,8 +194,9 @@ This project follows SOLID principles and best practices:
 
 ## Development Notes
 
-- The application uses H2 in-memory database for simplicity
-- Database schema is auto-created on startup
-- Sample data is loaded automatically
+- The application uses PostgreSQL database for persistent data storage
+- Database schema is auto-created/updated on startup using Hibernate DDL
+- Sample data is loaded automatically from data.sql
 - All API responses follow a consistent format
 - Proper HTTP status codes are used for different scenarios
+- Database connection details can be configured in application.yaml
